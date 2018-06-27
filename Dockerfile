@@ -50,19 +50,22 @@ RUN echo "export ORACLE_HOME=/usr/lib/oracle/11.2/client64/" > $TMP_DIR/oracle.s
 # 4. Installation Ora2Pg
 RUN mkdir -p $ORA2PG_DIR
 WORKDIR $ORA2PG_DIR
-COPY ora2pg-18.2.tar.gz .
-RUN tar -xzf ora2pg-18.2.tar.gz -C $ORA2PG_DIR \
-&& cd ora2pg-18.2 \
-&& perl Makefile.PL \
-&& make && make install \
-&& . /etc/profile \
-&& perl -MCPAN  -e "install DBD::Oracle" \
-&& apt-get purge -y --auto-remove -y alien gnupg2 wget make \
-&& rm -rf /var/lib/apt/lists/* 
+RUN set -x \
+	&& wget https://github.com/darold/ora2pg/archive/v18.2.tar.gz \
+	&& tar xzf v18.2.tar.gz \
+	&& cd ora2pg-18.2 \
+	&& perl Makefile.PL \
+	&& make && make install \
+	&& rm -rf v18.2.tar.gz ora2pg-18.2
+
+RUN set -x \
+	&& perl -MCPAN -e 'install DBI' \
+	&& perl -MCPAN -e 'install DBD::Oracle'
 
 #
 # 5. Nettoyage
-RUN apt-get -y clean \
+RUN apt-get purge -y --auto-remove -y alien gnupg2 wget make \
+&& apt-get -y clean \
 && apt-get -y autoclean  \
 && apt-get -y autoremove \
 && rm -rf "/tmp/" \
@@ -75,7 +78,8 @@ RUN apt-get -y clean \
    "/usr/share/groff/*" \
    "/usr/share/linda/*" \
    "/usr/share/lintian/*" \
-   "/usr/share/locale/*"
+   "/usr/share/locale/*" \
+   "/var/lib/apt/lists/*"
 
 #
 # 7. Configuration
