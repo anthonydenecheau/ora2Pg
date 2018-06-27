@@ -59,7 +59,6 @@ RUN set -x \
 && . /etc/profile \
 && perl -MCPAN -e "install DBD::Oracle" 
 
-
 #RUN set -x \
 #	&& wget https://github.com/darold/ora2pg/archive/v18.2.tar.gz \
 #	&& tar xzf v18.2.tar.gz \
