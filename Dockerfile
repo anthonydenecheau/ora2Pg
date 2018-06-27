@@ -48,27 +48,29 @@ RUN echo "export ORACLE_HOME=/usr/lib/oracle/11.2/client64/" > $TMP_DIR/oracle.s
 
 #
 # 4. Installation Ora2Pg
-RUN mkdir -p $ORA2PG_DIR
-WORKDIR $ORA2PG_DIR
+#RUN mkdir -p $ORA2PG_DIR
+#WORKDIR $ORA2PG_DIR
+#RUN set -x \
+#&& wget https://github.com/darold/ora2pg/archive/v18.2.tar.gz \
+#&& tar -xzf v18.2.tar.gz \
+#&& cd ora2pg-18.2 \
+#&& perl Makefile.PL \
+#&& make && make install \
+#&& . /etc/profile \
+#&& perl -MCPAN -e "install DBD::Oracle" 
+
 RUN set -x \
 && wget https://github.com/darold/ora2pg/archive/v18.2.tar.gz \
-&& tar -xzf v18.2.tar.gz \
+&& tar xzf v18.2.tar.gz \
 && cd ora2pg-18.2 \
 && perl Makefile.PL \
 && make && make install \
-&& . /etc/profile \
-&& perl -MCPAN -e "install DBD::Oracle" 
+&& rm -rf v18.2.tar.gz ora2pg-18.2
 
-#RUN set -x \
-#	&& wget https://github.com/darold/ora2pg/archive/v18.2.tar.gz \
-#	&& tar xzf v18.2.tar.gz \
-#	&& cd ora2pg-18.2 \
-#	&& perl Makefile.PL \
-#	&& make && make install \
-#	&& rm -rf v18.2.tar.gz ora2pg-18.2
-#RUN set -x \
+RUN set -x \
 #	&& perl -MCPAN -e 'install DBI' \
-#	&& perl -MCPAN -e 'install DBD::Oracle'
+&& . /etc/profile \
+&& perl -MCPAN -e 'install DBD::Oracle'
 
 #
 # 5. Nettoyage
