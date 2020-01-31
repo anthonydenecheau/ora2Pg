@@ -1,2 +1,2 @@
 echo "Building with travis commit of $BUILD_NAME ..."
-mvn clean package docker:build
+docker build . -t  $SCC_DOCKER_IMAGE
